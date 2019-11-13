@@ -1,0 +1,21 @@
+FROM arm64v8/alpine:latest
+
+EXPOSE 3000/tcp
+
+RUN echo "Setting up selfie user and it's home directory within the container"
+RUN adduser -h /home/selfie -s /bin/bash -D selfie selfie
+RUN apk add --progress --upgrade bash nodejs npm
+
+RUN mkdir /home/selfie/selfie.app
+WORKDIR /home/selfie/selfie.app
+
+RUN echo "Copying the sources to the container"
+COPY . .
+
+RUN echo "Building the selfie app from the sources"
+RUN npm install
+RUN chown -R selfie:selfie .
+
+USER selfie
+
+ENTRYPOINT ["npm", "start"]

@@ -1,0 +1,16 @@
+[Unit]
+Description=Selfie uMEC Demo App
+ConditionPathExists=|/usr/bin
+After=network.target
+
+[Service]
+Environment="SELFIE_LOG=/var/log/umec/selfie.log"
+User=www-data
+SyslogIdentifier=UMEC_SELFIE
+ExecStart=/usr/bin/nodejs /var/www/selfie.umec/app.js
+# > ${SELFIE_LOG} 2>&1
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
